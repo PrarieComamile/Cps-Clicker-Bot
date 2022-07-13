@@ -3,39 +3,42 @@ import keyboard
 from tkinter import *
 import time
 
+
 class Click:
-    def dongu(self, tus, var, saniye=0):
-        print(var)
-        if var == 1:
-            while True:
-                # print("calisiyor")
-                if keyboard.is_pressed(tus):
-                    print("****************")
-                    i = 0
-                    while i < saniye * 6.5:
-                        pyautogui.rightClick()
-                        time.sleep(0.045)
-                        if keyboard.is_pressed("ctrl+shift+b"):
-                            break
-                        i += 1
+    def __init__(self, tus, var, saniye=0):
+        self.tus = tus
+        self.var = var
+        self.saniye = saniye
 
-                if keyboard.is_pressed("ctrl+shift+b"):
-                    break
-        if var == 2:
-            while True:
-                # print("calisiyor")
-                if keyboard.is_pressed(tus):
-                    print("****************")
-                    i = 0
-                    while i < saniye * 6.5:
-                        pyautogui.leftClick()
-                        time.sleep(0.045)
-                        if keyboard.is_pressed("ctrl+shift+b"):
-                            break
-                        i += 1
+        self.dongu()
 
-                if keyboard.is_pressed("ctrl+shift+b"):
-                    break
+    def secim(self):
+        print(intvar.get())
+        if self.var == 1:
+            clicker = "right"
+        elif self.var == 2:
+            clicker = "left"
+        return clicker
+
+
+    def dongu(self):
+        self.secim()
+        clicker = self.secim()
+        print(clicker, "son clicker")
+        while True:
+            # print("calisiyor")
+            if keyboard.is_pressed(self.tus):
+                print("****************")
+                i = 0
+                while i < self.saniye * 6.5:
+                    pyautogui.click(clicks=5, button=clicker)
+                    time.sleep(0.045)
+                    if keyboard.is_pressed("ctrl+shift+b"):
+                        break
+                    i += 1
+
+            if keyboard.is_pressed("ctrl+shift+b"):
+                break
 
 window = Tk()
 window.title("CPS Bot")
@@ -51,16 +54,20 @@ yazi2.place(x=10, y=50)
 makrotus = Entry(window, width=8)
 makrotus.place(x=215, y=10)
 
+
+
 makrosn = Entry(window, width=8)
 makrosn.place(x=215, y=50)
 
 yazi4 = Label(window, text="Durdurmak için: (Ctrl+Shift+B)")
 yazi4.place(x=10, y=165)
 
+clicker = "null"
 
 def baslat():
-    bot = Click()
-    bot.dongu(tus=str(makrotus.get()), saniye=int(makrosn.get()), var=intvar.get())
+    global clicker
+    Click(tus=str(makrotus.get()), saniye=int(makrosn.get()), var=intvar.get())
+
 
 
 intvar = IntVar()
@@ -71,4 +78,3 @@ button = Button(window, text="Başlat", command=baslat)
 button.place(x=225, y=160)
 
 window.mainloop()
-
