@@ -46,7 +46,7 @@ class Click:
                 print("****************")
                 i = 0
                 while i < self.saniye * 6.5:
-                    pyautogui.click(clicks=5, button=clicker)
+                    pyautogui.click(clicks=2, button=clicker)
                     time.sleep(0.045)
                     if keyboard.is_pressed("ctrl+shift+b"):
                         break
