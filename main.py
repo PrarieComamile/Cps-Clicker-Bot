@@ -1,3 +1,4 @@
+import tkinter.messagebox
 import pyautogui
 import keyboard
 from tkinter import *
@@ -5,16 +6,15 @@ import time
 
 
 class Click:
-    def __init__(self, tus, var, var1, saniye=0):
+    def __init__(self, tus, var, var1, cps, saniye=0):
         self.tus = tus
         self.var = var
         self.saniye = saniye
         self.var1 = var1
-        print(var1, "1dwqawd")
+        self.cps = cps
         self.secim()
 
     def secim(self):
-        print(self.var1, "qwewqeqwe")
         if self.var1 == 0:
             self.dongubc()
         elif self.var1 == 1:
@@ -32,21 +32,17 @@ class Click:
         clicker = self.kontrol()
         while True:
             if keyboard.is_pressed(self.tus):
-                print("----------------")
                 pyautogui.mouseDown(button=clicker)
             elif keyboard.is_pressed("ctrl+shift+b"):
                 break
 
     def dongubc(self):
         clicker = self.kontrol()
-        print(clicker, "son clicker")
         while True:
-            # print("calisiyor")
             if keyboard.is_pressed(self.tus):
-                print("****************")
                 i = 0
                 while i < self.saniye * 6.5:
-                    pyautogui.click(clicks=2, button=clicker)
+                    pyautogui.click(clicks=self.cps, button=clicker)
                     time.sleep(0.045)
                     if keyboard.is_pressed("ctrl+shift+b"):
                         break
@@ -60,18 +56,26 @@ window.title("CPS Bot")
 window.geometry("300x200")
 window.resizable(width=False, height=False)
 
+p1 = PhotoImage(file="icon.png")
+window.iconphoto(False,p1)
+
 yazi1 = Label(window, text="Makronun çalışcağı tuş(harf): ")
 yazi1.place(x=10, y=10)
 
-yazi2 = Label(window, text="Makro basılı kalma süresi(sn): ")
+yazi2 = Label(window, text="Makro tıklama süresi(sn): ")
 yazi2.place(x=10, y=50)
+
+yazi3 = Label(window, text="Cps Girin(1 = 7CPS):")
+yazi3.place(x=10, y=130)
 
 makrotus = Entry(window, width=8)
 makrotus.place(x=215, y=10)
 
-
 makrosn = Entry(window, width=8)
 makrosn.place(x=215, y=50)
+
+makrocps = Entry(window, width=8)
+makrocps.place(x=130, y=130)
 
 yazi4 = Label(window, text="Durdurmak için: (Ctrl+Shift+B)")
 yazi4.place(x=10, y=165)
@@ -80,13 +84,16 @@ intvar1 = IntVar()
 sinirsiz = Checkbutton(window, text="Sürekli basılı tutma", variable=intvar1, offvalue=0, onvalue=1)
 sinirsiz.place(x=150, y=80)
 
+
 clicker = "null"
 
 
 def baslat():
     global clicker
-    Click(tus=str(makrotus.get()), saniye=int(makrosn.get()), var=intvar.get(), var1=intvar1.get())
-
+    try:
+        Click(tus=str(makrotus.get()), saniye=int(makrosn.get()), var=intvar.get(), var1=intvar1.get(), cps=int(makrocps.get()))
+    except:
+        tkinter.messagebox.showwarning(title="DİKKAT", message="UYARI! Yanlık veya eksik giriş!")
 
 intvar = IntVar()
 sagtik = Radiobutton(window, text="Sağ Tık", variable=intvar, value=1).place(x=5, y=80)
